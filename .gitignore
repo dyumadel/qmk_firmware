@@ -19,6 +19,8 @@
 *.map
 *.o
 *.a
+# Keep rdr_lib static library (.a)
+!/lib/rdr_lib/*
 *.so
 *.dylib
 *.dll
