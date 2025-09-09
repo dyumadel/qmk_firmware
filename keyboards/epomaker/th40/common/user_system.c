@@ -116,6 +116,10 @@ void Init_Gpio_Infomation(void) {
     //USB POWER
     gpio_set_pin_input(ES_USB_POWER_IO);
 
+    //Mode switch pins (from original working implementation)
+    gpio_set_pin_input_high(MODE_2P4G_IO);  // 2.4G mode switch
+    gpio_set_pin_input_high(MODE_BLE_IO);   // BLE mode switch
+
     md_gpio_inittypedef gpiox;
 
     gpiox.Pin   = MD_GPIO_PIN_4;
@@ -176,6 +180,9 @@ void Board_Wakeup_Init(void) {
 
 void es_chibios_user_idle_loop_hook(void) {
     uint32_t i;
+
+    // Check for mode switch changes
+    Check_Mode_Switch_Changed();
 
 	if(Keyboard_Info.Key_Mode == QMK_USB_MODE) {
         if (Usb_Dis_Connect) {
@@ -435,4 +442,138 @@ void es_chibios_user_idle_loop_hook(void) {
     }
 
 	Board_Wakeup_Init();
+}
+
+// Mode switch detection implementation
+uint8_t Read_Mode_Switch_Position(void) {
+    bool mode_2p4g = gpio_read_pin(MODE_2P4G_IO);  // 2.4G switch
+    bool mode_ble = gpio_read_pin(MODE_BLE_IO);    // BLE switch
+
+    // Switch logic based on original implementation
+    // When switch is in USB position: both pins should be HIGH (not selected)
+    // When switch is in 2.4G position: MODE_2P4G_IO is LOW, MODE_BLE_IO is HIGH
+    // When switch is in BT position: MODE_2P4G_IO is HIGH, MODE_BLE_IO is LOW
+
+    if (!mode_2p4g && mode_ble) {
+        return MODE_SWITCH_2P4G;
+    } else if (mode_2p4g && !mode_ble) {
+        return MODE_SWITCH_BT;
+    } else if (mode_2p4g && mode_ble) {
+        return MODE_SWITCH_USB;
+    }
+
+    // Default to current mode if reading is unclear
+    return Current_Mode_Switch_Position;
+}
+
+void Check_Mode_Switch_Changed(void) {
+    uint8_t current_position = Read_Mode_Switch_Position();
+
+    if (current_position != Current_Mode_Switch_Position) {
+        if (!Mode_Switch_Changed) {
+            // Start debounce timer
+            Mode_Switch_Changed = true;
+            Mode_Switch_Debounce_Timer = timer_read();
+            Last_Mode_Switch_Position = Current_Mode_Switch_Position;
+            Current_Mode_Switch_Position = current_position;
+        } else {
+            // Check if debounce time has passed
+            if (timer_elapsed(Mode_Switch_Debounce_Timer) >= MODE_SWITCH_DEBOUNCE_TIME) {
+                // Confirm the change is stable
+                if (current_position == Current_Mode_Switch_Position) {
+                    Handle_Mode_Switch_Change(Current_Mode_Switch_Position);
+                    Mode_Switch_Changed = false;
+                } else {
+                    // Reading changed again, restart debounce
+                    Current_Mode_Switch_Position = current_position;
+                    Mode_Switch_Debounce_Timer = timer_read();
+                }
+            }
+        }
+    } else {
+        // Position is stable, reset debounce
+        Mode_Switch_Changed = false;
+    }
+}
+
+void Handle_Mode_Switch_Change(uint8_t new_position) {
+    uint8_t target_mode;
+    uint8_t target_channel = Keyboard_Info.Ble_Channel; // Keep current BT channel
+
+    switch (new_position) {
+        case MODE_SWITCH_USB:
+            target_mode = QMK_USB_MODE;
+            break;
+
+        case MODE_SWITCH_2P4G:
+            target_mode = QMK_2P4G_MODE;
+            break;
+
+        case MODE_SWITCH_BT:
+            target_mode = QMK_BLE_MODE;
+            // Use last BT channel or default to channel 1
+            if (target_channel < QMK_BLE_CHANNEL_1 || target_channel > QMK_BLE_CHANNEL_3) {
+                target_channel = QMK_BLE_CHANNEL_1;
+            }
+            break;
+
+        default:
+            return; // Unknown position, do nothing
+    }
+
+    // Only switch if different from current mode
+    if ((target_mode != Keyboard_Info.Key_Mode) ||
+        (target_mode == QMK_BLE_MODE && target_channel != Keyboard_Info.Ble_Channel)) {
+
+        if (target_mode == QMK_USB_MODE) {
+            // Switch to USB mode
+            Keyboard_Info.Key_Mode = QMK_USB_MODE;
+            Spi_Send_Commad(USER_SWITCH_USB_MODE);
+            es_restart_usb_driver();
+            Save_Flash_Set();
+            Led_Rf_Pair_Flg = false;
+
+        } else if (target_mode == QMK_2P4G_MODE) {
+            // Switch to 2.4G mode
+            Usb_Disconnect();
+            Keyboard_Info.Key_Mode = QMK_2P4G_MODE;
+            Spi_Send_Commad(USER_SWITCH_2P4G_MODE);
+            Save_Flash_Set();
+            Led_Rf_Pair_Flg = true;
+
+        } else if (target_mode == QMK_BLE_MODE) {
+            // Switch to Bluetooth mode
+            Usb_Disconnect();
+            Keyboard_Info.Key_Mode = QMK_BLE_MODE;
+            Keyboard_Info.Ble_Channel = target_channel;
+
+            switch (target_channel) {
+                case QMK_BLE_CHANNEL_1:
+                    Spi_Send_Commad(USER_SWITCH_BLE_1_MODE);
+                    break;
+                case QMK_BLE_CHANNEL_2:
+                    Spi_Send_Commad(USER_SWITCH_BLE_2_MODE);
+                    break;
+                case QMK_BLE_CHANNEL_3:
+                    Spi_Send_Commad(USER_SWITCH_BLE_3_MODE);
+                    break;
+            }
+            Save_Flash_Set();
+            Led_Rf_Pair_Flg = true;
+        }
+
+        // Show mode indicator for 1 second
+        Show_Mode_Indicator = true;
+        Mode_Indicator_Timer = timer_read();
+    }
+}
+
+void Debug_Mode_Switch_Position(void) {
+    bool mode_2p4g = gpio_read_pin(MODE_2P4G_IO);
+    bool mode_ble = gpio_read_pin(MODE_BLE_IO);
+    uint8_t position = Read_Mode_Switch_Position();
+
+    // This can be viewed in QMK Console output
+    // Format: 2P4G:x BLE:x POS:x MODE:x
+    printf("2P4G:%d BLE:%d POS:%d MODE:%d\n", mode_2p4g, mode_ble, position, Keyboard_Info.Key_Mode);
 }

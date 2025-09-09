@@ -45,6 +45,10 @@
 #define ES_SDB_POWER_IO     (A3)
 #define ES_LED_POWER_IO     (D0)
 
+// Mode switch pins (from original working implementation)
+#define MODE_2P4G_IO        (B12)   // 2.4G mode detection
+#define MODE_BLE_IO         (B13)   // BLE mode detection
+
 #define PAL_ES32_PUPDR_PULLDOWN   PAL_ES32_PUD_PULLDOWN
 
 #define USER_KEY_BYTE_LENGTH	0X08
@@ -73,7 +77,8 @@ enum Custom_Keycodes {
     QMK_KB_2P4G_PAIR,
     QMK_KB_BLE1_PAIR,
     QMK_KB_BLE2_PAIR,
-    QMK_KB_BLE3_PAIR
+    QMK_KB_BLE3_PAIR,
+    QMK_DEBUG_SWITCH     // Debug mode switch position
 };
 
 enum Custom_KeyModes {
@@ -144,6 +149,13 @@ typedef enum {
 #define USER_BATT_DELAY_TIME        (100 * 25)  //25S
 #define USER_TIME_3S_TIME           (100 * 3)   //3S
 
+// Mode switch positions
+#define MODE_SWITCH_USB             0
+#define MODE_SWITCH_2P4G            1
+#define MODE_SWITCH_BT              2
+#define MODE_SWITCH_DEBOUNCE_TIME   100         // 100ms debounce
+#define MODE_INDICATOR_TIMEOUT      1000        // Show for 1000ms (1 second)
+
 #define KC_K29 	KC_BACKSLASH
 #define KC_K42 	KC_NONUS_HASH
 #define KC_K45 	KC_NONUS_BACKSLASH
@@ -164,6 +176,7 @@ typedef enum {
 #define QK_WLO	QMK_WIN_LOCK
 #define SIX_N	QMK_KB_SIX_N_CH
 #define TEST_CL	QMK_TEST_COLOUR
+#define DBG_SW  QMK_DEBUG_SWITCH
 
 extern Keyboard_Info_t Keyboard_Info;
 extern Keyboard_Status_t Keyboard_Status;
@@ -185,6 +198,16 @@ extern bool Usb_If_Ok_Led;
 extern uint16_t Led_Power_Up_Delay;
 extern uint8_t Temp_System_Led_Status;
 
+// Mode switch detection variables
+extern uint8_t Current_Mode_Switch_Position;
+extern uint8_t Last_Mode_Switch_Position;
+extern bool Mode_Switch_Changed;
+extern uint16_t Mode_Switch_Debounce_Timer;
+
+// Mode indicator variables
+extern bool Show_Mode_Indicator;
+extern uint16_t Mode_Indicator_Timer;
+
 extern uint8_t Systick_6ms_Count;
 extern uint8_t Systick_10ms_Count;
 extern uint16_t Systick_Interval_Count;
@@ -196,3 +219,9 @@ extern uint16_t Func_Time_3s_Count;
 extern void Init_Keyboard_Infomation(void);
 extern void es_change_qmk_nkro_mode_enable(void);
 void es_change_qmk_nkro_mode_disable(void);
+
+// Mode switch detection functions
+extern uint8_t Read_Mode_Switch_Position(void);
+extern void Check_Mode_Switch_Changed(void);
+extern void Handle_Mode_Switch_Change(uint8_t new_position);
+extern void Debug_Mode_Switch_Position(void);  // For debugging

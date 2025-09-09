@@ -70,6 +70,16 @@ uint8_t Batt_Led_Count = 0x00;
 uint16_t Time_3s_Count = 0;
 uint16_t Func_Time_3s_Count = 0;
 
+// Mode switch detection variables
+uint8_t Current_Mode_Switch_Position = MODE_SWITCH_USB;
+uint8_t Last_Mode_Switch_Position = MODE_SWITCH_USB;
+bool Mode_Switch_Changed = false;
+uint16_t Mode_Switch_Debounce_Timer = 0;
+
+// Mode indicator variables
+bool Show_Mode_Indicator = false;
+uint16_t Mode_Indicator_Timer = 0;
+
 //WAKEUP_IRQHandler
 OSAL_IRQ_HANDLER(Vector4C) {
     md_syscfg_clear_flag_wakeup(SYSCFG);
@@ -80,7 +90,7 @@ OSAL_IRQ_HANDLER(Vector4C) {
 OSAL_IRQ_HANDLER(Vector54) {
     uint32_t irq_ifm;
     OSAL_IRQ_PROLOGUE();
-    
+
     irq_ifm = EXTI->IFM;
     EXTI->ICR = irq_ifm;
 
@@ -91,7 +101,7 @@ OSAL_IRQ_HANDLER(Vector54) {
 OSAL_IRQ_HANDLER(Vector58) {
     uint32_t irq_ifm;
     OSAL_IRQ_PROLOGUE();
-    
+
     irq_ifm = EXTI->IFM;
     EXTI->ICR = irq_ifm;
 
@@ -102,7 +112,7 @@ OSAL_IRQ_HANDLER(Vector58) {
 OSAL_IRQ_HANDLER(Vector7C) {
     uint32_t irq_ifm;
     OSAL_IRQ_PROLOGUE();
-    
+
     irq_ifm = GP32C4T1->IFM;
     GP32C4T1->ICR = irq_ifm;
 
@@ -113,7 +123,7 @@ OSAL_IRQ_HANDLER(Vector7C) {
 OSAL_IRQ_HANDLER(Vector80) {
     uint32_t irq_ifm;
     OSAL_IRQ_PROLOGUE();
-    
+
     irq_ifm = GP16C4T1->IFM;
     GP16C4T1->ICR = irq_ifm;
 
@@ -124,7 +134,7 @@ OSAL_IRQ_HANDLER(Vector80) {
 OSAL_IRQ_HANDLER(Vector84) {
     uint32_t irq_ifm;
     OSAL_IRQ_PROLOGUE();
-    
+
     irq_ifm = GP16C4T2->IFM;
     GP16C4T2->ICR = irq_ifm;
 
@@ -150,7 +160,7 @@ OSAL_IRQ_HANDLER(Vector68) {
 OSAL_IRQ_HANDLER(Vector5C) {
     uint32_t irq_ifm;
     OSAL_IRQ_PROLOGUE();
-    
+
     irq_ifm = EXTI->IFM;
     EXTI->ICR = irq_ifm;
 
@@ -209,7 +219,7 @@ OSAL_IRQ_HANDLER(Vector78) {
                 Init_Spi_Power_Up = false;
             } else {
                 Init_Spi_100ms_Delay = 5;
-            } 
+            }
         }
     }
 
@@ -461,6 +471,27 @@ void Init_Keyboard_Infomation(void) {
         if (Keyboard_Info.Win_Lock > INIT_WIN_LOCK) {
             Keyboard_Info.Win_Lock = INIT_WIN_NLOCK;
         }
+    }
+
+    // Read current mode switch position and set initial mode accordingly
+    Current_Mode_Switch_Position = Read_Mode_Switch_Position();
+    Last_Mode_Switch_Position = Current_Mode_Switch_Position;
+
+    // Override the stored mode with the actual switch position
+    switch (Current_Mode_Switch_Position) {
+        case MODE_SWITCH_USB:
+            Keyboard_Info.Key_Mode = QMK_USB_MODE;
+            break;
+        case MODE_SWITCH_2P4G:
+            Keyboard_Info.Key_Mode = QMK_2P4G_MODE;
+            break;
+        case MODE_SWITCH_BT:
+            Keyboard_Info.Key_Mode = QMK_BLE_MODE;
+            // Keep the stored BT channel or default to channel 1
+            if (Keyboard_Info.Ble_Channel < QMK_BLE_CHANNEL_1 || Keyboard_Info.Ble_Channel > QMK_BLE_CHANNEL_3) {
+                Keyboard_Info.Ble_Channel = QMK_BLE_CHANNEL_1;
+            }
+            break;
     }
 }
 

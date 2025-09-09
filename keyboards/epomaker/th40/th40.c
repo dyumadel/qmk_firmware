@@ -29,11 +29,6 @@ uint8_t Test_Colour = 0U;
 // Local Caps Lock state tracking for wireless modes
 static bool local_caps_lock_state = false;
 
-// Mode indicator timing variables
-bool Show_Mode_Indicator = false;
-uint16_t Mode_Indicator_Timer = 0;
-#define MODE_INDICATOR_TIMEOUT 1000  // Show for 1000ms (1 second)
-
 // TH40 LED battery indicator indices (adjust for TH40 layout)
 uint8_t Led_Batt_Index_Tab[12] = {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11  // First row for battery indicator
@@ -691,6 +686,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 Key_Reset_Status = false;
             }
             Func_Time_3s_Count = 0;
+        } return true;
+        case QMK_DEBUG_SWITCH: {
+            if (record->event.pressed) {
+                Debug_Mode_Switch_Position();
+            }
         } return true;
         default:    return true; // Process all other keycodes normally
     }
