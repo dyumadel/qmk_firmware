@@ -150,12 +150,20 @@ void Led_Power_Low_Show(void) {
 void Led_Point_Flash_Show(void) {
     if (Systick_Led_Count < 25) {
         if (Led_Point_Count) {
+            // Regular LED point counting - light all LEDs
             rgb_matrix_driver_set_color_all(U_PWM, U_PWM, U_PWM);
-        } else {
-            rgb_matrix_driver_set_color_all(U_PWM, U_PWM, 0X00);
+        } else if (Mac_Win_Point_Count) {
+            // Mac/Win mode switching - only blink caps lock LED
+            rgb_matrix_set_color(LED_CAP_INDEX, U_PWM, U_PWM, 0X00);
         }
     } else {
-        rgb_matrix_driver_set_color_all(0X00, 0X00, 0X00);
+        if (Led_Point_Count) {
+            // Turn off all LEDs for regular point counting
+            rgb_matrix_driver_set_color_all(0X00, 0X00, 0X00);
+        } else if (Mac_Win_Point_Count) {
+            // Turn off only caps lock LED for Mac/Win mode switching
+            rgb_matrix_set_color(LED_CAP_INDEX, 0X00, 0X00, 0X00);
+        }
     }
 
     if (Systick_Led_Count >= 50) {
@@ -690,6 +698,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case QMK_DEBUG_SWITCH: {
             if (record->event.pressed) {
                 Debug_Mode_Switch_Position();
+            }
+        } return true;
+        case QMK_MAC_WIN_CH: {
+            if (!record->event.pressed) {
+                if (Keyboard_Info.Mac_Win_Mode == INIT_WIN_MODE) {
+                    // Switch to Mac mode
+                    Keyboard_Info.Mac_Win_Mode = INIT_MAC_MODE;
+                    Keyboard_Info.Win_Lock = INIT_WIN_NLOCK;  // Unlock Win key in Mac mode
+                    Mac_Win_Point_Count = 3;  // Blink 3 times for Mac mode
+                    layer_on(1);  // Switch to Mac layer
+                    unregister_code(KC_LALT); unregister_code(KC_LGUI); unregister_code(KC_RALT); unregister_code(KC_RGUI); unregister_code(KC_APP);
+                    Save_Flash_Set();
+                } else {
+                    // Switch to Windows mode
+                    Keyboard_Info.Mac_Win_Mode = INIT_WIN_MODE;
+                    Mac_Win_Point_Count = 1;  // Blink 1 time for Windows mode
+                    layer_off(1);  // Switch to Windows layer (layer 0)
+                    unregister_code(KC_LALT); unregister_code(KC_LGUI); unregister_code(KC_RALT); unregister_code(KC_RGUI); unregister_code(KC_APP);
+                    Save_Flash_Set();
+                }
             }
         } return true;
         default:    return true; // Process all other keycodes normally

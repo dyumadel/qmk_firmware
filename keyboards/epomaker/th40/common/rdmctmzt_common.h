@@ -78,7 +78,8 @@ enum Custom_Keycodes {
     QMK_KB_BLE1_PAIR,
     QMK_KB_BLE2_PAIR,
     QMK_KB_BLE3_PAIR,
-    QMK_DEBUG_SWITCH     // Debug mode switch position
+    QMK_DEBUG_SWITCH,    // Debug mode switch position
+    QMK_MAC_WIN_CH       // Windows/Mac mode switch
 };
 
 enum Custom_KeyModes {
@@ -177,6 +178,7 @@ typedef enum {
 #define SIX_N	QMK_KB_SIX_N_CH
 #define TEST_CL	QMK_TEST_COLOUR
 #define DBG_SW  QMK_DEBUG_SWITCH
+#define MW_CH   QMK_MAC_WIN_CH
 
 extern Keyboard_Info_t Keyboard_Info;
 extern Keyboard_Status_t Keyboard_Status;
