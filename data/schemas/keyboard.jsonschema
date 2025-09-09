@@ -555,6 +555,7 @@
                     "items": {
                         "type": "object",
                         "additionalProperties": false,
+                        "required": ["x", "y"],
                         "properties": {
                             "matrix": {
                                 "type": "array",
@@ -641,6 +642,7 @@
                     "items": {
                         "type": "object",
                         "additionalProperties": false,
+                        "required": ["x", "y"],
                         "properties": {
                             "matrix": {
                                 "type": "array",
