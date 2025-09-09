@@ -1249,11 +1249,11 @@ void hs_reset_settings(void) {
 #endif
 
     eeconfig_update_rgb_matrix_default();
-    keymap_config.raw = eeconfig_read_keymap();
+    eeconfig_read_keymap(&keymap_config);
 
 #if defined(NKRO_ENABLE) && defined(FORCE_NKRO)
     keymap_config.nkro = 0;
-    eeconfig_update_keymap(keymap_config.raw);
+    eeconfig_update_keymap(&keymap_config);
 #endif
 
 #if defined(WIRELESS_ENABLE)

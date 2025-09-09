@@ -58,9 +58,15 @@
 #define HS_RGB_BLINK_INDEX_MAC              25
 
 /* UART */
-#define SERIAL_DRIVER SD3
+#define SERIAL_DRIVER SD1
 #define SD1_TX_PIN C10
 #define SD1_RX_PIN C11
+
+/* UART for wireless module */
+#define UART_RX_PIN C11
+#define UART_RX_PAL_MODE 7
+#define UART_TX_PIN C10
+#define UART_TX_PAL_MODE 7
 
 /* Encoder */
 #define ENCODER_MAP_KEY_DELAY               1
@@ -102,3 +108,11 @@
 #define EECONFIG_USER_DATA_SIZE    (EECONFIG_RGBREC_USE_SIZE + EECONFIG_CONFINFO_USE_SIZE)
 #define RGBREC_EECONFIG_ADDR       (uint8_t *)(EECONFIG_USER_DATABLOCK)
 #define CONFINFO_EECONFIG_ADDR     (uint32_t *)((uint32_t)RGBREC_EECONFIG_ADDR + (uint32_t)EECONFIG_RGBREC_USE_SIZE)
+
+/* Matrix size */
+#define MATRIX_ROWS 5
+#define MATRIX_COLS 15
+
+/* Matrix pin configuration */
+#define MATRIX_ROW_PINS { A1, A2, A3, A4, C13 }
+#define MATRIX_COL_PINS { C0, C1, C2, C3, A6, B10, B11, B12, B13, B14, A10, C6, C7, C8, C9 }

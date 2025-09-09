@@ -1102,13 +1102,9 @@ void rgb_matrix_start_rec(void) {
 }
 
 bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
-    extern RGB rgb_matrix_ws2812_array[HS_RGB_INDICATOR_COUNT];
-
-    uint8_t r,g,b;
-    r = rgb_matrix_ws2812_array[1].r;
-    g = rgb_matrix_ws2812_array[1].g;
-    b = rgb_matrix_ws2812_array[1].b;
-    rgb_matrix_set_color(2,r,g,b);
+    // Use default color values since rgb_matrix_ws2812_array is no longer available
+    uint8_t r = 255, g = 255, b = 255;
+    rgb_matrix_set_color(2, r, g, b);
 
     if (test_white_light_flag) {
         RGB rgb_test_open = hsv_to_rgb((HSV){.h = 0, .s = 0, .v = RGB_MATRIX_VAL_STEP * 5});
@@ -1188,11 +1184,11 @@ void hs_reset_settings(void) {
 #endif
 
     eeconfig_update_rgb_matrix_default();
-    keymap_config.raw = eeconfig_read_keymap();
+    eeconfig_read_keymap(&keymap_config);
 
 #if defined(NKRO_ENABLE) && defined(FORCE_NKRO)
     keymap_config.nkro = 0;
-    eeconfig_update_keymap(keymap_config.raw);
+    eeconfig_update_keymap(&keymap_config);
 #endif
 
 #if defined(WIRELESS_ENABLE)

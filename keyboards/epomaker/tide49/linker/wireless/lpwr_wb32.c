@@ -39,7 +39,7 @@ void palcallback(void *arg) {
 
     switch (line) {
 #ifndef LPWR_UART_WAKEUP_DISABLE
-        case PAL_PAD(UART_RX_PIN): {
+        case PAL_PAD(C11): { // C11 is SD1_RX_PIN from config.h
             lpwr_set_sleep_wakeupcd(LPWR_WAKEUP_UART);
         } break;
 #endif
@@ -100,9 +100,9 @@ void lpwr_exti_init(void) {
 #endif
 
 #ifndef LPWR_UART_WAKEUP_DISABLE
-    gpio_set_pin_input(UART_RX_PIN);
+    gpio_set_pin_input(C11); // C11 is SD1_RX_PIN from config.h
     waitInputPinDelay();
-    palEnableLineEvent(UART_RX_PIN, PAL_EVENT_MODE_BOTH_EDGES);
+    palEnableLineEvent(C11, PAL_EVENT_MODE_BOTH_EDGES);
 #endif
 
     lpwr_exti_init_hook();
@@ -142,7 +142,7 @@ void lpwr_clock_enable(void) {
 #endif
 
 #ifndef LPWR_UART_WAKEUP_DISABLE
-    palSetLineMode(UART_RX_PIN, PAL_MODE_ALTERNATE(UART_RX_PAL_MODE) | PAL_OUTPUT_TYPE_PUSHPULL | PAL_OUTPUT_SPEED_HIGHEST);
+    palSetLineMode(C11, PAL_MODE_ALTERNATE(7) | PAL_OUTPUT_TYPE_PUSHPULL | PAL_OUTPUT_SPEED_HIGHEST); // C11 is SD1_RX_PIN, mode 7 is UART_RX_PAL_MODE
 #endif
 
     lpwr_clock_enable_user();

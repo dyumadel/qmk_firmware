@@ -4,6 +4,9 @@
 #include "rgb_record.h"
 #include "rgb_matrix.h"
 #include "eeprom.h"
+#include "nvm_eeprom_eeconfig_internal.h" // expose EECONFIG_USER_DATABLOCK
+#include "quantum.h" // for MATRIX_ROWS, MATRIX_COLS, HSV, RGB, etc.
+#include "color.h" // for hsv_to_rgb function
 
 #define RGBREC_STATE_ON  1
 #define RGBREC_STATE_OFF 0

@@ -27,9 +27,15 @@
 #define HS_RGB_BLINK_INDEX_MAC              45
 
 /* UART */
-#define SERIAL_DRIVER                       SD3
+#define SERIAL_DRIVER                       SD1
 #define SD1_TX_PIN                          C10
 #define SD1_RX_PIN                          C11
+
+/* UART for wireless module */
+#define UART_RX_PIN C11
+#define UART_RX_PAL_MODE 7
+#define UART_TX_PIN C10
+#define UART_TX_PAL_MODE 7
 
 /* Encoder */
 #define ENCODER_MAP_KEY_DELAY               1
@@ -51,6 +57,14 @@
 /* WS2812 */
 #define WS2812_SPI_DRIVER  SPIDM2
 #define WS2812_SPI_DIVISOR 32
+
+/* Matrix size */
+#define MATRIX_ROWS 6
+#define MATRIX_COLS 19
+
+/* Matrix pin configuration */
+#define MATRIX_ROW_PINS { A0, A1, A2, A3, A4, C13 }
+#define MATRIX_COL_PINS { C0, C1, C2, C3, A6, B10, B11, B12, B13, B14, A10, C6, C7, C8, C9, A8, C4, C5, B0 }
 
 /* rgb_record */
 #define RGBREC_CHANNEL_NUM 1
