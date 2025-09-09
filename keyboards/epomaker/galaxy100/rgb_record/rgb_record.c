@@ -239,7 +239,7 @@ bool rgbrec_register_record(uint16_t keycode, keyrecord_t *record) {
 }
 
 void eeconfig_init_user_datablock(void) {
-    
+
 }
 
 uint8_t find_index(void) {

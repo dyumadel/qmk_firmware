@@ -18,31 +18,31 @@
 #define MD_BT1_NAME "Tide Alice-1"
 #define MD_BT2_NAME "Tide Alice-2"
 #define MD_BT3_NAME "Tide Alice-3"
-#define MD_DONGLE_MANUFACTURER "Tide Alice"                     
+#define MD_DONGLE_MANUFACTURER "Tide Alice"
 
 /* Device Connection RGB Indicator Light Index And Color */
 #define HS_RGB_BLINK_INDEX_BT1 50
-#define HS_RGB_BLINK_INDEX_BT2 49 
-#define HS_RGB_BLINK_INDEX_BT3 48 
-#define HS_RGB_BLINK_INDEX_2G4 31 
+#define HS_RGB_BLINK_INDEX_BT2 49
+#define HS_RGB_BLINK_INDEX_BT3 48
+#define HS_RGB_BLINK_INDEX_2G4 31
 #define HS_RGB_BLINK_INDEX_USB 47
 
-#define HS_LBACK_COLOR_BT1 RGB_RED  
+#define HS_LBACK_COLOR_BT1 RGB_RED
 #define HS_LBACK_COLOR_BT2 RGB_BLUE
 #define HS_LBACK_COLOR_BT3 RGB_GREEN
-#define HS_LBACK_COLOR_2G4 RGB_WHITE 
-#define HS_LBACK_COLOR_USB RGB_WHITE 
+#define HS_LBACK_COLOR_2G4 RGB_WHITE
+#define HS_LBACK_COLOR_USB RGB_WHITE
 
 #define HS_PAIR_COLOR_BT1 RGB_RED
 #define HS_PAIR_COLOR_BT2 RGB_BLUE
 #define HS_PAIR_COLOR_BT3 RGB_GREEN
-#define HS_PAIR_COLOR_2G4 RGB_WHITE 
+#define HS_PAIR_COLOR_2G4 RGB_WHITE
 
 #define WIITE_B 0X6e
 
 /* Battery */
-#define BATTERY_CAPACITY_LOW 15 
-#define BATTERY_CAPACITY_STOP 0 
+#define BATTERY_CAPACITY_LOW 15
+#define BATTERY_CAPACITY_STOP 0
 #define RGB_MATRIX_BAT_INDEX_MAP {53, 54, 55, 56, 57, 58, 59, 60, 61, 62}
 
 /* Status Indicator Lamp */

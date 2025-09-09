@@ -121,7 +121,7 @@ void usb_remote_wakeup(void) {
         /* Woken up */
     }
 #else
-    
+
     if ((USB_DRIVER.state == USB_SUSPENDED)) {
         if (!suspend_timer) suspend_timer = sync_timer_read32();
         if (sync_timer_elapsed32(suspend_timer) >= USB_POWER_DOWN_DELAY) {
