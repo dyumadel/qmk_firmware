@@ -67,3 +67,21 @@
 #define RGB_MATRIX_LED_FLUSH_LIMIT 16
 #define RGB_MATRIX_MAXIMUM_BRIGHTNESS 180
 #define RGB_MATRIX_SLEEP
+
+// Key positions for MAC/WIN toggle (adjust these for TH40 layout)
+#define WIN_COL                     (1)
+#define WIN_ROL                     (3)
+#define MAC_COL                     (2)
+#define MAC_ROL                     (3)
+
+// BLE configuration for TH40
+#define USER_BlE_ID                 (0X0040)  // TH40 BLE ID
+#define USER_BlE1_NAME              "TH40-1"
+#define USER_BlE2_NAME              "TH40-2"
+#define USER_BlE3_NAME              "TH40-3"
+
+// Matrix configuration for TH40
+#define KEYBOARD_COL                (12)
+#define KEYBOARD_ROL                (5)
+#define MATRIX_USER_COL_PINS        { D15, D14, C15, C14, C13, D3, D2, C12, C11, C10, A14, C9 }
+#define MATRIX_USER_ROW_PINS        { B0, B3, B4, B5, B6 }

@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-#include "../../../lib/rdr_lib/rdr_common.h"
+#include "../../common/rdmctmzt_common.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT_tkl_ansi(
@@ -31,14 +31,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [2] = LAYOUT_tkl_ansi(
         KC_ESC,   KC_1,    KC_2,     KC_3,    KC_4,    KC_5,     KC_6,    KC_7,    KC_8,    KC_9,     KC_0,     KC_BSLS,
-        KC_CAPS,  MD_BLE1, MD_BLE2,  MD_BLE3, MD_24G,  RGB_SAI,  RGB_VAI, RGB_SAD, KC_MINS, KC_EQL,             RGB_RTOG,
-        KC_LSFT,  KC_GRV,  RGB_MOD,  RGB_SPD, RGB_SPI, KC_V,     RGB_HUD, RGB_VAD, RGB_HUI, KC_COMM,  KC_UP,    MW_CH,
-        U_EE_CLR, QK_WLO,  KC_LALT,                    QK_BAT,   KC_NO,   KC_SPC,           KC_LEFT,  KC_DOWN,  KC_RGHT
+        KC_CAPS,  MD_BLE1, MD_BLE2,  MD_BLE3, MD_24G,  MD_USB,  RGB_VAI, RGB_SAD, KC_MINS, KC_EQL,             RGB_TOG,
+        KC_LSFT,  KC_GRV,  RGB_MOD,  RGB_SPD, RGB_SPI, KC_V,     RGB_HUD, RGB_VAD, RGB_HUI, KC_COMM,  KC_UP,    SIX_N,
+        EE_CLR,   QK_WLO,  KC_LALT,                    QK_BAT,   KC_NO,   KC_SPC,           KC_LEFT,  KC_DOWN,  KC_RGHT
     ),
     [3] = LAYOUT_tkl_ansi(
         KC_ESC,   KC_1,    KC_2,     KC_3,    KC_4,    KC_5,     KC_6,    KC_7,    KC_8,    KC_9,     KC_0,     KC_BSLS,
-        KC_CAPS,  MD_BLE1, MD_BLE2,  MD_BLE3, MD_24G,  RGB_SAI,  RGB_VAI, RGB_SAD, KC_MINS, KC_EQL,             RGB_RTOG,
-        KC_LSFT,  KC_GRV,  RGB_MOD,  RGB_SPD, RGB_SPI, KC_V,     RGB_HUD, RGB_VAD, RGB_HUI, KC_COMM,  KC_UP,    MW_CH,
-        U_EE_CLR, KC_LALT, KC_LGUI,                    QK_BAT,   KC_NO,   KC_SPC,           KC_LEFT,  KC_DOWN,  KC_RGHT
+        KC_CAPS,  MD_BLE1, MD_BLE2,  MD_BLE3, MD_24G,  MD_USB,  RGB_VAI, RGB_SAD, KC_MINS, KC_EQL,             RGB_TOG,
+        KC_LSFT,  KC_GRV,  RGB_MOD,  RGB_SPD, RGB_SPI, KC_V,     RGB_HUD, RGB_VAD, RGB_HUI, KC_COMM,  KC_UP,    SIX_N,
+        EE_CLR,   KC_LALT, KC_LGUI,                    QK_BAT,   KC_NO,   KC_SPC,           KC_LEFT,  KC_DOWN,  KC_RGHT
     )
 };

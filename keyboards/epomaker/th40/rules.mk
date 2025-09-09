@@ -27,8 +27,20 @@ EEPROM_CUSTOM = custom
 NO_USB_STARTUP_CHECK = yes
 BLUETOOTH_CUSTOM = yes
 
-# Include RDR library
-include $(TOP_DIR)/lib/rdr_lib/rdr_lib.mk
+# Include common library (replaces rdr_lib)
+VPATH += keyboards/epomaker/th40/common
+SRC += rdmctmzt_common.c
+SRC += quantum/dynamic_keymap.c
+SRC += three_mode.c
+SRC += user_battery.c
+SRC += user_eeprom.c
+SRC += user_emi.c
+SRC += user_led_custom.c
+SRC += user_spi.c
+SRC += user_system.c
+
+VPATH += lib/chibios-contrib/os/common/ext/CMSIS/ES32/FS026/md
+SRC += lib/chibios-contrib/os/common/ext/CMSIS/ES32/FS026/md/md_spi.c
 
 ENCODER_MAP_ENABLE = yes
 DEBOUNCE_TYPE = asym_eager_defer_pk
