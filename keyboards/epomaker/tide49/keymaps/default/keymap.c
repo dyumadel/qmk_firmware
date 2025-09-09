@@ -33,8 +33,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FL] = LAYOUT(
         KC_GRV,   KC_1,      KC_2,      KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,      KC_0,     KC_MINS,  KC_EQL,  KC_DEL,
         KC_USB,   KC_BT1,    KC_BT2,    KC_BT3,   KC_2G4,   KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,   KC_VOLU,  KC_BSLS,           EE_CLR,
-        _______,  LED_TOG,   HS_BATQ,   KC_CAPS,  RP_P0,    RP_END,   KC_NO,    TO(_MBL), RGB_HUI,  RGB_MOD,   RGB_VAI,                     MO(_DEFA),
-        KC_FTOG,  GU_TOGG,   _______,   _______,  _______,  _______,            _______,  RGB_SPD,  RGB_VAD,   RGB_SPI,                     _______
+        _______,  LED_TOG,   HS_BATQ,   KC_CAPS,  RP_P0,    RP_END,   KC_NO,    TO(_MBL), RM_HUEU,  RM_NEXT,   RM_VALU,                     MO(_DEFA),
+        KC_FTOG,  GU_TOGG,   _______,   _______,  _______,  _______,            _______,  RM_SPDD,  RM_VALD,   RM_SPDU,                     _______
         ),
 
     [_MBL] = LAYOUT(
@@ -54,8 +54,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_MFL] = LAYOUT(
         KC_GRV,   KC_1,      KC_2,      KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,      KC_0,     KC_MINS,  KC_EQL,  KC_DEL,
         KC_USB,   KC_BT1,    KC_BT2,    KC_BT3,   KC_2G4,   KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,   KC_VOLU,  KC_BSLS,           EE_CLR,
-        _______,  LED_TOG,   HS_BATQ,   KC_CAPS,  RP_P0,    RP_END,   TO(_BL),  KC_NO,    RGB_HUI,  RGB_MOD,   RGB_VAI,                     MO(_DEFA),
-        KC_FTOG,  GU_TOGG,   _______,   _______,  _______,  _______,            _______,  RGB_SPD,  RGB_VAD,   RGB_SPI,                     _______
+        _______,  LED_TOG,   HS_BATQ,   KC_CAPS,  RP_P0,    RP_END,   TO(_BL),  KC_NO,    RM_HUEU,  RM_NEXT,   RM_VALU,                     MO(_DEFA),
+        KC_FTOG,  GU_TOGG,   _______,   _______,  _______,  _______,            _______,  RM_SPDD,  RM_VALD,   RM_SPDU,                     _______
         ),
 
     [_DEFA] = LAYOUT(

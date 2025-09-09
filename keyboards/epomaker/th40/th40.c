@@ -367,9 +367,9 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     return false;
 }
 
-void notify_usb_device_state_change_user(enum usb_device_state usb_device_state) {
+void notify_usb_device_state_change_user(struct usb_device_state usb_device_state) {
     if (Keyboard_Info.Key_Mode == QMK_USB_MODE) {
-        if (usb_device_state == USB_DEVICE_STATE_CONFIGURED) {
+        if (usb_device_state.configure_state == USB_DEVICE_STATE_CONFIGURED) {
             Usb_If_Ok_Led = true;
         } else {
             Usb_If_Ok_Led = false;
@@ -623,28 +623,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 record->event.pressed = false;
             }
         } return true;
-        case RGB_VAI: {
+        case RM_VALU: {
             if (!record->event.pressed) {
                 if (rgb_matrix_get_val() >= RGB_MATRIX_MAXIMUM_BRIGHTNESS) {
                     Led_Point_Count = 3;
                 }
             }
         } return true;
-        case RGB_VAD: {
+        case RM_VALD: {
             if (!record->event.pressed) {
                 if (rgb_matrix_get_val() <= 0) {
                     Led_Point_Count = 3;
                 }
             }
         } return true;
-        case RGB_SPI: {
+        case RM_SPDU: {
             if (!record->event.pressed) {
                 if (rgb_matrix_get_speed() >= 255) {
                     Led_Point_Count = 3;
                 }
             }
         } return true;
-        case RGB_SPD: {
+        case RM_SPDD: {
             if (!record->event.pressed) {
                 if (rgb_matrix_get_speed() <= 0) {
                     Led_Point_Count = 3;

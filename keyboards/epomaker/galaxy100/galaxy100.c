@@ -343,7 +343,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case RP_P0:
         case RP_P1:
         case RP_P2:
-        case RGB_MOD:
+        case RM_NEXT:
             break;
         default: {
             if (rgbrec_is_started()) {
@@ -356,7 +356,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         } break;
     }
 
-    if (rgbrec_is_started() && (!(keycode == RP_P0 || keycode == RP_P1 || keycode == RP_P2 || keycode == RP_END || keycode == RGB_MOD || keycode == MO(_FL) || keycode == MO(_MFL)))) {
+    if (rgbrec_is_started() && (!(keycode == RP_P0 || keycode == RP_P1 || keycode == RP_P2 || keycode == RP_END || keycode == RM_NEXT || keycode == MO(_FL) || keycode == MO(_MFL)))) {
 
         return false;
     }
@@ -397,14 +397,14 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 
             return false;
         } break;
-        case RGB_SPI: {
+        case RM_SPDU: {
             if (record->event.pressed) {
                 if (rgb_matrix_get_speed() >= (RGB_MATRIX_SPD_STEP * 5)) {
                     rgb_blink_dir();
                 }
             }
         } break;
-        case RGB_SPD: {
+        case RM_SPDD: {
             if (record->event.pressed) {
                 if (rgb_matrix_get_speed() <= RGB_MATRIX_SPD_STEP) {
                     rgb_blink_dir();
@@ -414,7 +414,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                 }
             }
         } break;
-        case RGB_VAI: {
+        case RM_VALU: {
             if (record->event.pressed) {
                 if (rgb_matrix_get_val() >= (RGB_MATRIX_MAXIMUM_BRIGHTNESS - RGB_MATRIX_VAL_STEP)) {
                     rgb_blink_dir();
@@ -424,11 +424,11 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                 }
             }
         } break;
-        case RGB_VAD: {
+        case RM_VALD: {
             if (record->event.pressed) {
                 if (rgb_matrix_get_val() <= RGB_MATRIX_VAL_STEP) {
                     rgb_blink_dir();
-            
+
                     rgb_matrix_set_color_all(0, 0, 0);
                     start_hsv.v = 0;
                 } else {
@@ -514,7 +514,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 
             return false;
         } break;
-        case RGB_MOD: {
+        case RM_NEXT: {
             if (record->event.pressed) {
                 if (rgb_matrix_get_mode() == RGB_MATRIX_CUSTOM_RGBR_PLAY) {
                     if (rgbrec_is_started()) {
@@ -538,7 +538,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 
             return false;
         } break;
-        case RGB_HUI: {
+        case RM_HUEU: {
             if (record->event.pressed) {
                 record_color_hsv(true);
                 start_hsv = rgb_matrix_get_hsv();
