@@ -250,6 +250,11 @@
         "suspend_wakeup_delay": 1000,
         "vid": "0x342D"
     },
+    "host": {
+        "default": {
+            "nkro": true
+        }
+    },
     "ws2812": {
         "pin": "B15",
         "driver": "spi"
