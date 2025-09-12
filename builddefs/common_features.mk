@@ -219,7 +219,7 @@ ifneq ($(strip $(EEPROM_DRIVER)),none)
           COMMON_VPATH += $(PLATFORM_PATH)/$(PLATFORM_KEY)/$(DRIVER_DIR)/flash
           COMMON_VPATH += $(DRIVER_PATH)/flash
           SRC += eeprom_driver.c eeprom_legacy_emulated_flash.c legacy_flash_ops.c
-        else ifneq ($(filter $(MCU_SERIES),STM32F1xx STM32F3xx STM32F4xx STM32L4xx STM32G4xx WB32F3G71xx WB32FQ95xx AT32F415 GD32VF103),)
+        else ifneq ($(filter $(MCU_SERIES),STM32F1xx STM32F3xx STM32F4xx STM32L4xx STM32G0xx STM32G4xx WB32F3G71xx WB32FQ95xx AT32F415 GD32VF103),)
           # Wear-leveling EEPROM implementation, backed by MCU flash
           OPT_DEFS += -DEEPROM_DRIVER -DEEPROM_WEAR_LEVELING
           SRC += eeprom_driver.c eeprom_wear_leveling.c
@@ -267,22 +267,14 @@ ifneq ($(strip $(WEAR_LEVELING_DRIVER)),none)
     ifeq ($(strip $(WEAR_LEVELING_DRIVER)), embedded_flash)
       OPT_DEFS += -DHAL_USE_EFL
       SRC += wear_leveling_efl.c
-      $(INTERMEDIATE_OUTPUT)/wear_leveling_efl.o: FILE_SPECIFIC_CFLAGS += -include $(PLATFORM_PATH)/$(PLATFORM_KEY)/$(DRIVER_PATH)/wear_leveling/wear_leveling_efl_config.h
-      $(INTERMEDIATE_OUTPUT)/wear_leveling.o: FILE_SPECIFIC_CFLAGS += -include $(PLATFORM_PATH)/$(PLATFORM_KEY)/$(DRIVER_PATH)/wear_leveling/wear_leveling_efl_config.h
     else ifeq ($(strip $(WEAR_LEVELING_DRIVER)), spi_flash)
       FLASH_DRIVER := spi
       SRC += wear_leveling_flash_spi.c
-      $(INTERMEDIATE_OUTPUT)/wear_leveling_flash_spi.o: FILE_SPECIFIC_CFLAGS += -include $(DRIVER_PATH)/wear_leveling/wear_leveling_flash_spi_config.h
-      $(INTERMEDIATE_OUTPUT)/wear_leveling.o: FILE_SPECIFIC_CFLAGS += -include $(DRIVER_PATH)/wear_leveling/wear_leveling_flash_spi_config.h
     else ifeq ($(strip $(WEAR_LEVELING_DRIVER)), rp2040_flash)
       SRC += wear_leveling_rp2040_flash.c
-      $(INTERMEDIATE_OUTPUT)/wear_leveling_rp2040_flash.o: FILE_SPECIFIC_CFLAGS += -include $(PLATFORM_PATH)/$(PLATFORM_KEY)/$(DRIVER_PATH)/wear_leveling/wear_leveling_rp2040_flash_config.h
-      $(INTERMEDIATE_OUTPUT)/wear_leveling.o: FILE_SPECIFIC_CFLAGS += -include $(PLATFORM_PATH)/$(PLATFORM_KEY)/$(DRIVER_PATH)/wear_leveling/wear_leveling_rp2040_flash_config.h
     else ifeq ($(strip $(WEAR_LEVELING_DRIVER)), legacy)
       COMMON_VPATH += $(PLATFORM_PATH)/$(PLATFORM_KEY)/$(DRIVER_DIR)/flash
       SRC += legacy_flash_ops.c wear_leveling_legacy.c
-      $(INTERMEDIATE_OUTPUT)/wear_leveling_legacy.o: FILE_SPECIFIC_CFLAGS += -include $(PLATFORM_PATH)/$(PLATFORM_KEY)/$(DRIVER_PATH)/wear_leveling/wear_leveling_legacy_config.h
-      $(INTERMEDIATE_OUTPUT)/wear_leveling.o: FILE_SPECIFIC_CFLAGS += -include $(PLATFORM_PATH)/$(PLATFORM_KEY)/$(DRIVER_PATH)/wear_leveling/wear_leveling_legacy_config.h
     endif
   endif
 endif
@@ -730,6 +722,7 @@ ifeq ($(strip $(LIB8TION_ENABLE)), yes)
         # ATmegaxxU2 does not have hardware MUL instruction - lib8tion must be told to use software multiplication routines
         OPT_DEFS += -DLIB8_ATTINY
     endif
+    OPT_DEFS += -DFASTLED_SCALE8_FIXED=1 -DFASTLED_BLEND_FIXED=1
     SRC += $(LIB_PATH)/lib8tion/lib8tion.c
 endif
 
