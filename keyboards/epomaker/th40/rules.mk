@@ -42,5 +42,4 @@ SRC += user_system.c
 VPATH += lib/chibios-contrib/os/common/ext/CMSIS/ES32/FS026/md
 SRC += lib/chibios-contrib/os/common/ext/CMSIS/ES32/FS026/md/md_spi.c
 
-ENCODER_MAP_ENABLE = yes
 DEBOUNCE_TYPE = asym_eager_defer_pk
