@@ -21,9 +21,9 @@ uint16_t Usb_Change_Mode_Delay = 0;
 bool Usb_Change_Mode_Wakeup = false;
 bool Mode_Synchronization_Signal = false;
 
-uint16_t g_usb_sof_frame_id = 0; 
+uint16_t g_usb_sof_frame_id = 0;
 uint16_t g_usb_sof_frame_id_last = 0;
-bool Usb_Dis_Connect = false; 
+bool Usb_Dis_Connect = false;
 
 void Mode_Synchronization(void) {
     switch(Keyboard_Info.Key_Mode) {
@@ -124,8 +124,29 @@ void es_send_extra(report_extra_t *report) {
 	}
 }
 
+#ifdef RAW_ENABLE
+void es_send_raw_hid(uint8_t *data, uint8_t length) {
+    if(!es_qmk_driver) {
+        return;
+    }
+
+    if(es_qmk_driver && es_qmk_driver->send_raw_hid) {
+		(*es_qmk_driver->send_raw_hid)(data, length);
+	}
+}
+#endif
+
 volatile host_driver_t * es_qmk_driver = NULL;
-const host_driver_t es_user_driver  = {es_keyboard_leds, es_send_keyboard, es_send_nkro, es_send_mouse, es_send_extra};
+const host_driver_t es_user_driver  = {
+    .keyboard_leds = es_keyboard_leds,
+    .send_keyboard = es_send_keyboard,
+    .send_nkro = es_send_nkro,
+    .send_mouse = es_send_mouse,
+    .send_extra = es_send_extra,
+#ifdef RAW_ENABLE
+    .send_raw_hid = es_send_raw_hid,
+#endif
+};
 
 void User_bluetooth_send_keyboard(uint8_t *report, uint32_t len) {
 	if(app_2g4_buffer_full()) {

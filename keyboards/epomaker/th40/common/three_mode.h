@@ -22,9 +22,9 @@ extern uint16_t Usb_Change_Mode_Delay;
 extern bool Usb_Change_Mode_Wakeup;
 extern bool Mode_Synchronization_Signal;
 
-extern uint16_t g_usb_sof_frame_id; 
+extern uint16_t g_usb_sof_frame_id;
 extern uint16_t g_usb_sof_frame_id_last;
-extern bool Usb_Dis_Connect; 
+extern bool Usb_Dis_Connect;
 
 extern void Mode_Synchronization(void);
 extern void Ble_Name_Synchronization(void);
@@ -34,6 +34,9 @@ extern void es_send_keyboard(report_keyboard_t *report);
 extern void es_send_nkro(report_nkro_t *report);
 extern void es_send_mouse(report_mouse_t *report);
 extern void es_send_extra(report_extra_t *report);
+#ifdef RAW_ENABLE
+extern void es_send_raw_hid(uint8_t *data, uint8_t length);
+#endif
 extern void User_bluetooth_send_keyboard(uint8_t *report, uint32_t len);
 
 extern volatile host_driver_t * es_qmk_driver;
