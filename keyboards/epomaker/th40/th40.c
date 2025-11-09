@@ -452,7 +452,7 @@ void keyboard_post_init_user(void) {
     }
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     Usb_Change_Mode_Delay = 0;
     Usb_Change_Mode_Wakeup = false;
 
@@ -720,6 +720,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
             }
         } return true;
-        default:    return true; // Process all other keycodes normally
+//        default:    return true; // Process all other keycodes normally
+        default: return process_record_user(keycode, record);  // 변경
+
     }
 }
