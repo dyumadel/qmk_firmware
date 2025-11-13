@@ -20,33 +20,44 @@ enum layers { _BASE = 0, _LOWER, _RAISE, _ADJUST };
 
 // 매크로 정의
 enum custom_keycodes {
-    MY_MACRO = SAFE_RANGE
+    MY_MACRO = SAFE_RANGE,
+    LANG_TOGGLE,
 };
+
+// 콤보 정의
+//enum combo_events {
+//    COMBO_SPC_TAB_LANG,
+//};
+
+enum {
+    TD_TAB_LANG,
+};
+
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Layer 0: Base */
     [_BASE] = LAYOUT_tkl_ansi(
         QK_GESC, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,              KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-        KC_TAB, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,              KC_H,    KC_J,    KC_K,    KC_L,             KC_ENT,
+        TD(TD_TAB_LANG), KC_A,    KC_S,    KC_D,    KC_F,    KC_G,              KC_H,    KC_J,    KC_K,    KC_L,             KC_ENT,
         KC_LSFT, KC_SLSH, KC_Z,    KC_X,    KC_C,    KC_V,              KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_RSFT,
-        KC_LCTL, KC_LGUI, KC_LALT,          LT(_LOWER,KC_SPC), MO(_LOWER), LT(_RAISE,KC_SPC),          KC_SCLN, KC_EQL,  KC_MINS
+        KC_LCTL, KC_LGUI, KC_LALT,          LT(_LOWER,KC_SPC), MO(_LOWER), LT(_LOWER,KC_SPC),    LT(_RAISE,KC_MINS), KC_QUOT,  KC_GRV
     ),
     
     /* Layer 1: Lower (숫자 + 괄호 + 기호) */
     [_LOWER] = LAYOUT_tkl_ansi(
-        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,              KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
-        KC_CAPS, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,           KC_CIRC, KC_AMPR, KC_ASTR, KC_PLUS,          KC_COLN,
-        KC_TRNS, KC_QUES, KC_UNDS, KC_QUOT,  KC_LPRN, KC_RPRN,             KC_LBRC, KC_RBRC, KC_LCBR, KC_RCBR, KC_BSLS, KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,          KC_TRNS,   KC_TRNS,             KC_QUOT, KC_DQUO, KC_UNDS
+        QK_GESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,              KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
+        KC_CAPS, KC_EXLM, KC_LBRC, KC_LPRN, KC_LCBR, KC_EQL,           KC_SCLN, KC_RCBR, KC_RPRN, KC_RBRC,          KC_ENT,
+        KC_TRNS, KC_QUES, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,           KC_CIRC, KC_AMPR, KC_ASTR, KC_PLUS, KC_BSLS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,          KC_TRNS,  KC_TRNS,          KC_UNDS, KC_DQUO, KC_PIPE
     ),
     
     /* Layer 2: Raise (함수키 + 네비게이션) */
     [_RAISE] = LAYOUT_tkl_ansi(
-        QK_GESC, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,             KC_NO,   KC_NO,   KC_UP,   KC_NO,   KC_NO,   KC_DEL,
-        KC_CAPS, KC_LNG1,   KC_NO,   KC_HOME, KC_END,  KC_PGUP,           KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT,          KC_TRNS,
-        KC_LSFT, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,             KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-        KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,      KC_TRNS,   KC_TRNS,                  KC_QUOT, KC_DQUO, KC_NO
+        QK_GESC, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_HOME,             KC_PGUP,   KC_NO,   KC_UP,   KC_NO,   KC_NO,   KC_DEL,
+        KC_CAPS, KC_TRNS,   KC_NO,   KC_NO, KC_NO,  KC_END,           KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT,          KC_ENT,
+        KC_LSFT, KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,      KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,      KC_TRNS,   KC_TRNS,                  KC_TRNS, KC_TRNS, KC_TRNS
     ),
     
     /* Layer 3: Adjust (함수키 + RGB + 시스템) */
@@ -73,6 +84,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING("Fbeoghks@850329");
             }
             return false; // 기본 동작 방지
+
+        case LANG_TOGGLE:
+            if (record->event.pressed) {
+                tap_code(KC_LNG1);  // macOS
+                tap_code(KC_LNG2);  // Windows/Linux
+            }
+            return false;
     }
     return true; // 다른 키는 정상 처리
 }
+
+//const uint16_t PROGMEM combo_spc_tab[] = {
+//    MO(_LOWER), KC_TAB, COMBO_END,
+//};
+
+
+// 콤보 액션 정의
+//combo_t key_combos[] = {
+//    [COMBO_SPC_TAB_LANG] = COMBO(combo_spc_tab, LANG_TOGGLE),
+//};
+
+
+// 탭댄스 액션
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_TAB_LANG] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, KC_CAPS),
+};
